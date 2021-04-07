@@ -4,14 +4,14 @@
 Create:
 Faad Ghoraishi
 faad.ghoraishi@ibm.com
-Feb 2021
+March 2021
 IBM innternal use only
-
-
 ###########################
+
 ### How to use this tool to install nginx and configure it to be a reverse-proxy #####
 
 This tool will install a Reverse-Porxy on your system.
+
 Reverse-proxy is used by Power VSI to connect to COS buckets via the Private subnet for such applications as back and restore of AIX and IBM i servers.
 The support suports both Classic and VPC VSI. Intenet access is temparorly required but can be disabled after the reverse-proxy is installed.
 This tool uses both shell scripting and ansible playbook (ansible will be also automatically installed on the server).
@@ -19,23 +19,21 @@ This tool uses both shell scripting and ansible playbook (ansible will be also a
 
 ###########################
 
-REQUIREMENT:
+REQUIREMENT for reverse-proxy server:
 
 - Intenet access: this is needed to install the nginx and ansible packages. You can disable internet access after reverse-proxy is installed.
-- This tool is only supproted on Centos 7 and 8 and Redhat 7 and 8.. 
+- This tool is only supproted on follwoing OSs: Centos 7 and 8 and Redhat 7 and 8.. 
 
 
 ###########################
 
-There are three capabilities in this tool:
+There are two capabilities in this tool:
 
 1. This tool can be used to install nginx and configure it to be a reverse-proxy to be used by Power System VSI's using AWS CLI to access Cloud Object Storage (COS) buckets on private subnet.
 
 2. This tool can also be used to change and update the COS endpoint defined in the nginx.conf file after the reverse-proxy is successufully installed. You can repeat this step as many times as you wish.
    Simply change the value of the cos_enpoint parameter in the parameters.txt file and rerun the install.sh.
 
-3. This tool can also install and configure Standalone version of AWS CLI on a server. Run "install_awscli_standalone.sh" to install and configure AWS CLI on AIX,Redhat and Centos VSIs.
-   This toll has the AWS CLI binaries so it can install it on any server without internet access.
 
 ############################
 
@@ -49,22 +47,19 @@ To make a server into a reverse-proxy server:
 
 -  Update the parameters in the "parameters.txt" file to meet you specific need. It is recommended to change the password variable from the default given.
 
--  Login to the target VSI as root and Run ./install.sh to start installation on the target VSI.
+-  Login to the target VSI as root and Run ./install_rev_proxy.sh to start installation on the target VSI.
 
 -  The encryption files are all placed on /root folder and are called acstest.xxx. 
 
 -  The output will show you the certificate file to be used for IBM i provisioning
 
-To install standalone AWS CLI on a server:
+TEST:
 
-To test your reverse-proxy, you will need to install and configure a AWS CLI on another system like AIX etc.
-This toll has the AWS CLI code so it can install it on any server without internet access.
+You will need to install AWS CLI to test this reverse-proxy:
 
-- Copy and untar this file on the new server where you want to install AWS CLI
+see my other github repo for installing aws cli.
 
-- Update the parameters in the "parameters.txt" file with your correct COS credentials
-
-- Run "install_awscli_standalone.sh" to install and configure AWS CLI on your server: AIX,Redhat and Centos VSIs. 
+- install and configure AWS CLI on your server: AIX,Redhat and Centos VSIs. 
 
 - to test the Reverse proxy run this command on the server where you just install AWS CLI 
 
@@ -73,7 +68,7 @@ aws --no-verify-ssl --endpoint-url https://<private ip of reverse proxy> s3 ls
 
 ##############################
 
-You will need to share the .crt with IBM i Admin to provision it in IBM before you can use the reverse-proxy.
+For IBM i,  ou will need to share the .crt with IBM i Admin to provision it in IBM before you can use the reverse-proxy.
 No need for .crt for AIX server to access COS via reverse-proxy.
 
 - acstest.crt  
