@@ -1,0 +1,17 @@
+# Define parameters.
+#
+# You can change the cos_endpoint parameter after instllation, the script will then just update the nginx.conf file with new info and restart nginx
+############################ Input parametres ######################
+
+
+# Change or leave as is
+
+cos_endpoint="https://s3.direct.us-south.cloud-object-storage.appdomain.cloud"
+password="test123"
+
+# Optional:
+
+encrypt="sha256"
+rsa=2048
+
+

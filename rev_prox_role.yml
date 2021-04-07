@@ -1,0 +1,11 @@
+---
+- name: Installs reverse proxy and configure it with proper security settings
+  hosts: localhost
+  become: yes
+  roles:
+    - role:  install_rev_proxy
+      vars:
+        COS_ENDPOINT_URL: "https://s3.private.us-east.cloud-object-storage.appdomain.cloud"
+        PASSWORD: "test123"
+        ENCRYPT: "sha256"
+        RSA: 2048

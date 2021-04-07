@@ -1,0 +1,6 @@
+---
+# defaults file for install_rev_proxy
+# Make sure your geo maps to the geo in the COS endpoint URL. Here it is us-east
+
+#COS_ENDPOINT_URL: "https://s3.private.us-east.cloud-object-storage.appdomain.cloud"
+#PASSWORD: "test123"
