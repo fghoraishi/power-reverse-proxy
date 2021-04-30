@@ -5,12 +5,13 @@
 
 
 # Change or leave as is
+# NOTE: you must define the COS endpoint as https://<endpoint> format.
+# For VPC VSI you must use direct Endpoint. For IBM Classic VSI, use private Endpoints.
 
 cos_endpoint="https://s3.direct.us-south.cloud-object-storage.appdomain.cloud"
-password="test123"
 
-# Optional:
-
+# Optional parameters:
+password="XERF123RERSSSAXVBR"
 encrypt="sha256"
 rsa=2048
 

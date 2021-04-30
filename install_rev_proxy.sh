@@ -66,7 +66,7 @@ then
                  echo "nginx is in yum repo"
                  yum -y install nginx
              else
-                 echo "nginx is not in yum repo"
+                 echo "nginx is not in yum repo. Installing nginx using python pip"
                  pip3 install nginx
              fi
 
@@ -75,7 +75,7 @@ then
                  echo "Ansible is in yum repo"
                  yum -y install ansible
              else
-                 echo "Ansible is not in yum repo"
+                 echo "Ansible is not in yum repo. Installing nginx using python pip"
                  pip3 install ansible 
              fi
          yum -y upgrade
@@ -96,6 +96,7 @@ then
         echo "###############################################################"
 
         ansible-playbook rev_prox_role.yml --extra-vars "COS_ENDPOINT_URL=$cos_endpoint PASSWORD=$password ENCRYPT=$encrypt RSA=$rsa"
+
         #########################################################################################################
         echo
         echo

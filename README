@@ -27,16 +27,6 @@ REQUIREMENT for reverse-proxy server:
 
 ###########################
 
-There are two capabilities in this tool:
-
-1. This tool can be used to install nginx and configure it to be a reverse-proxy to be used by Power System VSI's using AWS CLI to access Cloud Object Storage (COS) buckets on private subnet.
-
-2. This tool can also be used to change and update the COS endpoint defined in the nginx.conf file after the reverse-proxy is successufully installed. You can repeat this step as many times as you wish.
-   Simply change the value of the cos_enpoint parameter in the parameters.txt file and rerun the install.sh.
-
-
-############################
-
 STEPS:
 
 To make a server into a reverse-proxy server:
@@ -51,15 +41,13 @@ To make a server into a reverse-proxy server:
 
 -  The encryption files are all placed on /root folder and are called acstest.xxx. 
 
--  The output will show you the certificate file to be used for IBM i provisioning
+-  The output will show you the certificate file to be used for IBM i provisioning. You will not need the .crt file for AIX access to COS.
 
-TEST:
+HOw to TEST:
 
 You will need to install AWS CLI to test this reverse-proxy:
 
-see my other github repo for installing aws cli.
-
-- install and configure AWS CLI on your server: AIX,Redhat and Centos VSIs. 
+- install and configure AWS CLI or any s3 cli commands on your server: AIX,Redhat and Centos VSIs. 
 
 - to test the Reverse proxy run this command on the server where you just install AWS CLI 
 
