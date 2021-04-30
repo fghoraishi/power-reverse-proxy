@@ -31,19 +31,21 @@ STEPS:
 
 To make a server into a reverse-proxy server:
 
--  copy this tar file to the target server where you want to make into a reverse-proxy
-
--  untar the package " tar -xzvf <filename.tar.gz>"
+-  copy all the files to the target server where you want to make into a reverse-proxy
 
 -  Update the parameters in the "parameters.txt" file to meet you specific need. It is recommended to change the password variable from the default given.
 
--  Login to the target VSI as root and Run ./install_rev_proxy.sh to start installation on the target VSI.
+-  Login to the target VSI as root and Run 
 
--  The encryption files are all placed on /root folder and are called acstest.xxx. 
+           ./install_rev_proxy.sh 
+
+   to start installation on the target VSI.
+
+-  The SSL certificate files are all placed on /root folder and are called acstest.xxx. 
 
 -  The output will show you the certificate file to be used for IBM i provisioning. You will not need the .crt file for AIX access to COS.
 
-HOw to TEST:
+How to TEST:
 
 You will need to install AWS CLI to test this reverse-proxy:
 
