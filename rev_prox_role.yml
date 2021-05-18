@@ -9,3 +9,6 @@
         PASSWORD: "test123"
         ENCRYPT: "sha256"
         RSA: 2048
+        FQDN: labservices@ibm.com
+        ORGNAME: IBM
+        SSL_EXPIRE: 365

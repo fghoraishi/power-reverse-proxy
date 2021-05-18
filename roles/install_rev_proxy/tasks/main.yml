@@ -71,7 +71,7 @@
   register: ppp
 
 - name: Create the certificate file based on the previous csr file 
-  shell: 'openssl x509 -req -{{ ENCRYPT }} -days 365 -in ~/acstest.csr -signkey ~/acstest.key -out ~/acstest.crt'
+  shell: 'openssl x509 -req -{{ ENCRYPT }} -days {{ SSL_EXPIRE }} -in ~/acstest.csr -signkey ~/acstest.key -out ~/acstest.crt'
   when: 
     - ppp.stat.exists == False 
     - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"

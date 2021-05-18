@@ -27,29 +27,39 @@ REQUIREMENT for reverse-proxy server:
 
 ###########################
 
+There are two capabilities in this tool:
+
+1. This tool can be used to install nginx and configure it to be a reverse-proxy to be used by Power System VSI's using AWS CLI to access Cloud Object Storage (COS) buckets on private subnet.
+
+2. This tool can also be used to change and update the COS endpoint defined in the nginx.conf file after the reverse-proxy is successufully installed. You can repeat this step as many times as you wish.
+   Simply change the value of the cos_enpoint parameter in the parameters.txt file and rerun the install.sh.
+
+
+############################
+
 STEPS:
 
 To make a server into a reverse-proxy server:
 
--  copy all the files to the target server where you want to make into a reverse-proxy
+-  copy this tar file to the target server where you want to make into a reverse-proxy
+
+-  untar the package " tar -xzvf <filename.tar.gz>"
 
 -  Update the parameters in the "parameters.txt" file to meet you specific need. It is recommended to change the password variable from the default given.
 
--  Login to the target VSI as root and Run 
+-  Login to the target VSI as root and Run ./install_rev_proxy.sh to start installation on the target VSI.
 
-           ./install_rev_proxy.sh 
+-  The encryption files are all placed on /root folder and are called acstest.xxx. 
 
-   to start installation on the target VSI.
+-  The output will show you the certificate file to be used for IBM i provisioning
 
--  The SSL certificate files are all placed on /root folder and are called acstest.xxx. 
-
--  The output will show you the certificate file to be used for IBM i provisioning. You will not need the .crt file for AIX access to COS.
-
-How to TEST:
+TEST:
 
 You will need to install AWS CLI to test this reverse-proxy:
 
-- install and configure AWS CLI or any s3 cli commands on your server: AIX,Redhat and Centos VSIs. 
+see my other github repo for installing aws cli.
+
+- install and configure AWS CLI on your server: AIX,Redhat and Centos VSIs. 
 
 - to test the Reverse proxy run this command on the server where you just install AWS CLI 
 

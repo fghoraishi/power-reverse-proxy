@@ -1,17 +1,23 @@
 # Define parameters.
 #
-# You can change the cos_endpoint parameter after instllation, the script will then just update the nginx.conf file with new info and restart nginx
+# You can change the cos_endpoint parameter after instllation. 
+The script will then just update the nginx.conf file with new info and restart nginx
 ############################ Input parametres ######################
 
+# PARAMETERS
+# Change or leave as is if it matches your needs.
 
-# Change or leave as is
-# NOTE: you must define the COS endpoint as https://<endpoint> format.
-# For VPC VSI you must use direct Endpoint. For IBM Classic VSI, use private Endpoints.
-
+# COS endpoint must be entered in a fomate of  https://<endpoint>
 cos_endpoint="https://s3.direct.us-south.cloud-object-storage.appdomain.cloud"
 
-# Optional parameters:
-password="XERF123RERSSSAXVBR"
+password="ibmeexx234xew"
+FQDN="ibm.ibm.com"
+ORGNAME="IBM"
+# Days for self signed SSL to expire (10 years = 3650 days)
+ssl_expire=3650
+
+# Optional:
+
 encrypt="sha256"
 rsa=2048
 

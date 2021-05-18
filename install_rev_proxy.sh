@@ -66,16 +66,16 @@ then
                  echo "nginx is in yum repo"
                  yum -y install nginx
              else
-                 echo "nginx is not in yum repo. Installing nginx using python pip"
+                 echo "nginx is not in yum repo"
                  pip3 install nginx
              fi
 
          yum  list ansible | grep ansible &> /dev/null
              if [ $? -eq 0 ]; then
-                 echo "Ansible is in yum repo"
+                 echo "Ansible is in yum repo. Instaling with pip"
                  yum -y install ansible
              else
-                 echo "Ansible is not in yum repo. Installing nginx using python pip"
+                 echo "Ansible is not in yum repo. Instaling with pip"
                  pip3 install ansible 
              fi
          yum -y upgrade
@@ -95,7 +95,7 @@ then
         echo "STARTING Ansible Playbook to configure nginx"
         echo "###############################################################"
 
-        ansible-playbook rev_prox_role.yml --extra-vars "COS_ENDPOINT_URL=$cos_endpoint PASSWORD=$password ENCRYPT=$encrypt RSA=$rsa"
+        ansible-playbook rev_prox_role.yml --extra-vars "COS_ENDPOINT_URL=$cos_endpoint PASSWORD=$password ENCRYPT=$encrypt RSA=$rsa FQDN=$FQDN ORGNAME=$ORGNAME SSL_EXPIRE=$ssl_expire"
 
         #########################################################################################################
         echo
