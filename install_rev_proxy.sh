@@ -39,8 +39,8 @@ then
                  echo "nginx is in yum repo"
                  yum -y install nginx
              else
-                 echo "nginx is not in yum repo. Installing nginx via pip3 method"
-                 pip3 install nginx
+                 echo "nginx is not in yum repo. Installing nginx repo first and then running yum command"
+#                 pip3 install nginx
              fi
 
          yum  list ansible | grep ansible &> /dev/null
@@ -48,8 +48,8 @@ then
                  echo "Ansible is in yum repo"
                  yum -y install ansible
              else
-                 echo "Ansible is not in yum repo. Installing Ansible via pip3 method"
-                 pip3 install ansible 
+                 echo "nginx is not in yum repo. Installing ansible via PIP3"
+                 pip3 install --user ansible 
              fi
          yum -y upgrade
    else
@@ -66,17 +66,16 @@ then
                  echo "nginx is in yum repo"
                  yum -y install nginx
              else
-                 echo "nginx is not in yum repo"
-                 pip3 install nginx
+                 echo "nginx is not in yum repo. Installing via ansible playbook via installing nginx repo first"
              fi
 
          yum  list ansible | grep ansible &> /dev/null
              if [ $? -eq 0 ]; then
-                 echo "Ansible is in yum repo. Instaling with pip"
+                 echo "Ansible is in yum repo. Instaling with yum"
                  yum -y install ansible
              else
-                 echo "Ansible is not in yum repo. Instaling with pip"
-                 pip3 install ansible 
+                 echo "nginx is not in yum repo. Installing via PIP3"
+                 pip3 install --user ansible 
              fi
          yum -y upgrade
    fi
@@ -101,6 +100,9 @@ then
         echo
         echo
         echo "This is your  acstest.crt file which is located in the home directory. This file is to be used to configure IBM i servers"
+        echo "You will need to now install AWS cli or S3CMD cli to use this reverse proxy via a CLI command"
+        echo "You can install AWS cli via yum install awscli command if you have internet access"
+        echo "Also you need to configure AWS cli via aws configure command and enter your COS HMAC credentials"
         cat ~/acstest.crt
 
 else
