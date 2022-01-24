@@ -7,18 +7,19 @@ The script will then just update the nginx.conf file with new info and restart n
 # PARAMETERS
 # Change or leave as is if it matches your needs.
 
-# COS endpoint must be entered in a fomate of  https://<endpoint>
+###### Mandatory parameter change
+# Enter which COS endpoint your wish to use. COS endpoint must be entered in a fomate of  https://<endpoint>
+# Use either Direct to Private COS endpoint addresses. If you reverse-proxy server is in a VPC, then use Direct Endpoint.
+
 cos_endpoint="https://s3.direct.us-south.cloud-object-storage.appdomain.cloud"
+
+###### Optional parameter changes
 
 password="ibmeexx234xew"
 FQDN="ibm.ibm.com"
 ORGNAME="IBM"
 # Days for self signed SSL to expire (10 years = 3650 days)
 ssl_expire=3650
-
-# Optional:
-
 encrypt="sha256"
 rsa=2048
-
 
