@@ -103,6 +103,13 @@ then
         echo "You will need to now install AWS cli or S3CMD cli to use this reverse proxy via a CLI command"
         echo "You can install AWS cli via yum install awscli command if you have internet access"
         echo "Also you need to configure AWS cli via aws configure command and enter your COS HMAC credentials"
+        echo "**********************************************************"
+        echo
+        echo "You can now issue an aws command to access the COS bucket"
+        echo
+        echo "For Example:"
+        echo  "aws --no-verify-ssl --endpoint-url https://<reverse-proxy private IP> s3 ls"
+        echo
         cat ~/acstest.crt
 
 else
