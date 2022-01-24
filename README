@@ -1,14 +1,19 @@
 ######################
-# rev-proxy-install-v1
+# rev-proxy-install-v4
 
 Create:
 Faad Ghoraishi
 faad.ghoraishi@ibm.com
-March 2021
+Jan 2022
 IBM innternal use only
 ###########################
+UPDATE:
+- Jan 2022 added nginx installation via local repo as nginx is no longer supported in the native repos for CentOS/Redhat VSI in IBM Cloud.
 
-### How to use this tool to install nginx and configure it to be a reverse-proxy #####
+
+##########################
+
+### How to use this tool to install a reverse-proxy to be used in IBM Cloud to provide access to Cloud Object Storagae (COS) for power servers #####
 
 This tool will install a Reverse-Porxy on your system.
 
