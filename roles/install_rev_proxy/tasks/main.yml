@@ -51,11 +51,6 @@
   when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
 
   when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
-- name: Start nginx service
-  service:
-    name: nginx
-    state: restarted
-  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
 
 - name: copy custom nginx.conf to /etc/nginx/nginx.conf
   template:
@@ -120,9 +115,15 @@
     remote_src: yes
 
 - name: restart nginx and reload the config file
-  shell: "nginx -t; sleep2; nginx -s quit; sleep 3; nginx"
+  shell: "nginx -t; sleep 3"
   when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
   tags: update
+
+- name: Start nginx service
+  service:
+    name: nginx
+    state: restarted
+  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
 
 #- name: The acstest.crt files is located on the home directory. This file is to be used to configure IBM i servers
 #  shell: "cat ~/acstest.crt"
