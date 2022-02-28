@@ -32,6 +32,7 @@ then
          echo ##############################################
          yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
          subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms"
+         yum -y install epel-release
          yum -y upgrade
          yum -y install python36
          yum  list nginx | grep nginx &> /dev/null
@@ -59,6 +60,7 @@ then
          yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noar
          ARCH=$( /bin/arch );subscription-manager repos --enable "codeready-builder-for-rhel-8-${ARCH}-rpms"
          dnf config-manager --set-enabled powertools
+         yum -y install epel-release
          yum -y upgrade
          yum -y install python36
          yum  list nginx | grep nginx &> /dev/null
