@@ -30,8 +30,8 @@ then
          echo ##############################################
          echo "System runs on OS = $OS and Version = $SUB";
          echo ##############################################
-         yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-         subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms"
+#         yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+#         subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms"
          yum -y install epel-release
          yum -y upgrade
          yum -y install python36
@@ -41,10 +41,9 @@ then
                  yum -y install nginx
              else
                  echo "nginx is not in yum repo. Installing nginx repo first and then running yum command"
-#                 pip3 install nginx
              fi
 
-         yum  list ansible | grep ansible &> /dev/null
+         yum list ansible | grep ansible &> /dev/null
              if [ $? -eq 0 ]; then
                  echo "Ansible is in yum repo"
                  yum -y install ansible
@@ -57,9 +56,9 @@ then
          echo ##############################################
          echo "System runs on OS = $OS and Version = $SUB";
          echo ##############################################
-         yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noar
-         ARCH=$( /bin/arch );subscription-manager repos --enable "codeready-builder-for-rhel-8-${ARCH}-rpms"
-         dnf config-manager --set-enabled powertools
+#         yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+#         ARCH=$( /bin/arch );subscription-manager repos --enable "codeready-builder-for-rhel-8-${ARCH}-rpms"
+#         dnf config-manager --set-enabled powertools
          yum -y install epel-release
          yum -y upgrade
          yum -y install python36

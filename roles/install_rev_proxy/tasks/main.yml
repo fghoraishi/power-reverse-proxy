@@ -13,15 +13,6 @@
     path: ~/acstest.key
   register: p
 
-- name: clean any port associated with 443 if previously configured
-  shell: '/usr/sbin/fuser -k 443/tcp'
-  ignore_errors: True
-  no_log: True
-  failed_when: False
-  when:
-    - p.stat.exists == True
-    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
-
 - name: copy nginx repos for centos
   template:
     src: nginx.repo.centos.j2
@@ -46,11 +37,12 @@
     state: present
   when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
 
-- name: Run fuser to clear xhe IP addresses. This is to fix any nginx start issue
-  shell: '/usr/sbin/fuser -k 443/tcp; /usr/sbin/fuser -k 80/tcp'
-  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
-
-  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+- name: Run fuser to clear the IP addresses. This is to fix any nginx start issue
+  command: '/usr/sbin/fuser -k 443/tcp; /usr/sbin/fuser -k 80/tcp'
+  ignore_errors: True
+  when:
+    - p.stat.exists == True
+    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
 
 - name: copy custom nginx.conf to /etc/nginx/nginx.conf
   template:
@@ -62,15 +54,9 @@
   template:
     src: myopenssl.cnf.j2
     dest: ~/myopenssl.cnf
-#  tags: openssl3
-
-- name: Ansible check file exists.
-  stat:
-    path: ~/acstest.key
-  register: p
 
 - name: Create the key files
-  shell: 'openssl genrsa -des3 -passout pass:{{ PASSWORD }} -out ~/acstest.key {{ RSA }}'
+  command: 'openssl genrsa -des3 -passout pass:{{ PASSWORD }} -out ~/acstest.key {{ RSA }}'
   when:
     - p.stat.exists == False
     - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
@@ -82,7 +68,7 @@
   register: pp
 
 - name: Create the csr file based on the previous key file
-  shell: 'openssl req -new -config ~/myopenssl.cnf -newkey rsa:2048 -nodes -keyout ~/acstest.key -out ~/acstest.csr'
+  command: 'openssl req -new -config ~/myopenssl.cnf -newkey rsa:2048 -nodes -keyout ~/acstest.key -out ~/acstest.csr'
 
   when:
     - pp.stat.exists == False
@@ -95,7 +81,7 @@
   register: ppp
 
 - name: Create the certificate file based on the previous csr file
-  shell: 'openssl x509 -req -{{ ENCRYPT }} -days {{ SSL_EXPIRE }} -in ~/acstest.csr -signkey ~/acstest.key -out ~/acstest.crt'
+  command: 'openssl x509 -req -{{ ENCRYPT }} -days {{ SSL_EXPIRE }} -in ~/acstest.csr -signkey ~/acstest.key -out ~/acstest.crt'
   when:
     - ppp.stat.exists == False
     - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
@@ -115,7 +101,7 @@
     remote_src: yes
 
 - name: restart nginx and reload the config file
-  shell: "nginx -t; sleep 3"
+  command: "nginx -t; sleep 3"
   when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
   tags: update
 
