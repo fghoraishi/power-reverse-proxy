@@ -94,7 +94,7 @@
     remote_src: yes
 
 - name: restart nginx and reload the config file
-  command: "nginx -t; sleep 3"
+  command: "nginx -t"
   when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
   tags: update
 
@@ -106,7 +106,8 @@
   when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
 
 - name: Run fuser to clear the IP addresses. This is to fix any nginx start issue
-  command: "/usr/sbin/fuser -k 443/tcp; /usr/sbin/fuser -k 80/tcp"
+  #command: "/usr/sbin/fuser -k 443/tcp; /usr/sbin/fuser -k 80/tcp"
+  command: "/usr/sbin/fuser -k 443/tcp"
   ignore_errors: True
   when:
     - p.stat.exists == True
