@@ -93,7 +93,7 @@
     dest: /etc/pki/tls
     remote_src: yes
 
-- name: restart nginx and reload the config file
+- name: Reload the config file
   command: "nginx -t"
   when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
   tags: update
@@ -102,23 +102,35 @@
   service:
     name: nginx
     state: restarted
+  ignore_errors: True
   register: nginxout
   when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
 
-- name: Run fuser to clear the IP addresses. This is to fix any nginx start issue
+- name: "Run fuser to clear the IP addresses. This is to fix any nginx start issue"
   #command: "/usr/sbin/fuser -k 443/tcp; /usr/sbin/fuser -k 80/tcp"
   command: "/usr/sbin/fuser -k 443/tcp"
   ignore_errors: True
   when:
     - p.stat.exists == True
-    - nginxout.rc != 0
+    - nginxout is failed
+    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+
+- name: "Run fuser to clear the IP addresses. This is to fix any nginx start issue"
+  command: "/usr/sbin/fuser -k 80/tcp"
+  ignore_errors: True
+  when:
+    - p.stat.exists == True
+    - nginxout is failed
     - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
 
 - name: Start nginx service
   service:
     name: nginx
     state: restarted
-  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+  ignore_errors: True
+  when:
+    - nginxout is failed
+    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
 
 #- name: The acstest.crt files is located on the home directory. This file is to be used to configure IBM i servers
 #  shell: "cat ~/acstest.crt"

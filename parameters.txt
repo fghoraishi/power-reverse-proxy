@@ -1,7 +1,7 @@
 # Define parameters.
 #
 # You can change the cos_endpoint parameter after instllation. 
-#The script will then just update the nginx.conf file with new info and restart nginx
+# The script will then just update the nginx.conf file with new info and restart nginx
 ############################ Input parametres ######################
 
 # PARAMETERS
