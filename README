@@ -41,20 +41,23 @@ There are two capabilities in this tool:
 
 
 ############################
-
 STEPS:
 
 To make a server into a reverse-proxy server:
 
--  copy this tar file to the target server where you want to make into a reverse-proxy
+-  install git on your server and then issue the command "git clone https://github.com/fghoraishi/power-reverse-proxy.git"
+
+-  Alsternativley, you can copy this tar file to the target server where you want to make into a reverse-proxy
 
 -  untar the package " tar -xzvf <filename.tar.gz>"
 
--  Update the parameters in the "parameters.txt" file to meet you specific need. It is recommended to change the password variable from the default given.
+-  Update the parameters in the "parameters.txt" file to meet you specific need.
+
+- Typically you only need to change the cos_endpoint parameter. It is recommended to change the password variable from the default given.
 
 -  Login to the target VSI as root and Run ./install_rev_proxy.sh to start installation on the target VSI.
 
--  The encryption files are all placed on /root folder and are called acstest.xxx. 
+-  The encryption files are all placed on /root folder and are called acstest.xxx.
 
 -  The output will show you the certificate file to be used for IBM i provisioning
 
