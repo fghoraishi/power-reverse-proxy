@@ -98,6 +98,11 @@
   when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
   tags: update
 
+- name: Make enginx process to start on reboot
+  command: "systemctl enable nginx"
+  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+  tags: update
+
 - name: Start nginx service
   service:
     name: nginx
