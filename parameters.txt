@@ -8,10 +8,10 @@
 # Change or leave as is if it matches your needs.
 
 ###### Mandatory parameter change
-# Enter which COS endpoint your wish to use. COS endpoint must be entered in a fomate of  https://<endpoint>
+# Enter which COS endpoint your wish to use. 
 # Use either Direct to Private COS endpoint addresses. If you reverse-proxy server is in a VPC, then use Direct Endpoint.
 
-cos_endpoint="https://s3.direct.us-south.cloud-object-storage.appdomain.cloud"
+cos_endpoint="s3.direct.us-south.cloud-object-storage.appdomain.cloud"
 
 ###### Optional parameter changes
 
