@@ -1,0 +1,146 @@
+---
+# tasks file for install_rev_proxy
+
+#- name: Upgrade all packages
+#  package:
+#    name: '*'
+#    state: latest
+#  when: ansible_facts['distribution'] == "CentOS"
+#  ignore_errors: yes
+
+- name: check if acstest.key file exists on home directory.
+  stat:
+    path: ~/acstest.key
+  register: p
+
+- name: copy nginx repos for centos
+  template:
+    src: nginx.repo.centos.j2
+    dest: /etc/yum.repos.d/nginx.repo
+  when: ansible_facts['distribution'] == "CentOS"
+
+- name: copy nginx repos for redhat
+  template:
+    src: nginx.repo.redhat.j2
+    dest: /etc/yum.repos.d/nginx.repo
+  when: ansible_facts['distribution'] == "RedHat"
+
+- name: Install nginx
+  yum:
+    name: nginx
+    state: present
+  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+
+- name: Install psmisc
+  yum:
+    name: psmisc
+    state: present
+  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+
+- name: copy custom nginx.conf to /etc/nginx/nginx.conf
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    backup: yes
+
+- name: copy custom myopenssl
+  template:
+    src: myopenssl.cnf.j2
+    dest: ~/myopenssl.cnf
+
+- name: Create the key files
+  command: 'openssl genrsa -des3 -passout pass:{{ PASSWORD }} -out ~/acstest.key {{ RSA }}'
+  when:
+    - p.stat.exists == False
+    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+#  tags: openssl
+
+- name: Ansible check file exists.
+  stat:
+    path: ~/acstest.csr
+  register: pp
+
+- name: Create the csr file based on the previous key file
+  command: 'openssl req -new -config ~/myopenssl.cnf -newkey rsa:2048 -nodes -keyout ~/acstest.key -out ~/acstest.csr'
+
+  when:
+    - pp.stat.exists == False
+    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+#  tags: openssl3
+
+- name: Ansible check file exists.
+  stat:
+    path: ~/acstest.crt
+  register: ppp
+
+- name: Create the certificate file based on the previous csr file
+  command: 'openssl x509 -req -{{ ENCRYPT }} -days {{ SSL_EXPIRE }} -in ~/acstest.csr -signkey ~/acstest.key -out ~/acstest.crt'
+  when:
+    - ppp.stat.exists == False
+    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+#  tags: openssl4
+
+- name: copy key files to /etc/pki/tls
+  copy:
+    src: ~/acstest.key
+    dest: /etc/pki/tls
+    remote_src: yes
+#  tags: openssl5
+
+- name: copy crt files to /etc/pki/tls
+  copy:
+    src: ~/acstest.crt
+    dest: /etc/pki/tls
+    remote_src: yes
+
+- name: Reload the config file
+  command: "nginx -t"
+  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+  tags: update
+
+- name: Make enginx process to start on reboot
+  command: "systemctl enable nginx"
+  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+  tags: update
+
+- name: Start nginx service
+  service:
+    name: nginx
+    state: restarted
+  ignore_errors: True
+  register: nginxout
+  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+
+- name: "Run fuser to clear the IP addresses. This is to fix any nginx start issue"
+  #command: "/usr/sbin/fuser -k 443/tcp; /usr/sbin/fuser -k 80/tcp"
+  command: "/usr/sbin/fuser -k 443/tcp"
+  ignore_errors: True
+  when:
+    - p.stat.exists == True
+    - nginxout is failed
+    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+
+- name: "Run fuser to clear the IP addresses. This is to fix any nginx start issue"
+  command: "/usr/sbin/fuser -k 80/tcp"
+  ignore_errors: True
+  when:
+    - p.stat.exists == True
+    - nginxout is failed
+    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+
+- name: Start nginx service
+  service:
+    name: nginx
+    state: restarted
+  ignore_errors: True
+  when:
+    - nginxout is failed
+    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+
+#- name: The acstest.crt files is located on the home directory. This file is to be used to configure IBM i servers
+#  shell: "cat ~/acstest.crt"
+#  register: output
+
+#  name: Print .crt certificate to be used for IBM i configuation
+#` debug:
+#    var: output.stdout
