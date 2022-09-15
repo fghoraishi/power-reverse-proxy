@@ -21,11 +21,11 @@ echo "#############################"
 # Find OS type and OS Level
 OS=`cat /etc/os-release | grep ^ID= | awk -F\" {'print $2}'`
 
-if [ "$OS" = "rhel" ] || [ "$OS" = "centos" ]
+if [ "$OS" = "rhel" ] || [ "$OS" = "centos" ] || [ "$OS" = "rocky" ]
 then
    VER=`cat /etc/os-release | grep VERSION_ID | awk -F\" {'print $2}' | awk -F. {'print $1}'`
    SUB=`cat /etc/os-release | grep VERSION_ID | awk -F\" {'print $2}'`
-   if [ $VER -lt 8 ]
+   if [ $VER -lt 9 ]
       then
          echo ##############################################
          echo "System runs on OS = $OS and Version = $SUB";
