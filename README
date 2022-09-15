@@ -41,7 +41,6 @@ There are two capabilities in this tool:
 
 
 ############################
-
 STEPS:
 
 To make a server into a reverse-proxy server:
@@ -52,13 +51,13 @@ To make a server into a reverse-proxy server:
 
 -  untar the package " tar -xzvf <filename.tar.gz>"
 
--  Update the parameters in the "parameters.txt" file to meet you specific need. 
+-  Update the parameters in the "parameters.txt" file to meet you specific need.
 
 - Typically you only need to change the cos_endpoint parameter. It is recommended to change the password variable from the default given.
 
 -  Login to the target VSI as root and Run ./install_rev_proxy.sh to start installation on the target VSI.
 
--  The encryption files are all placed on /root folder and are called acstest.xxx. 
+-  The encryption files are all placed on /root folder and are called acstest.xxx.
 
 -  The output will show you the certificate file to be used for IBM i provisioning
 

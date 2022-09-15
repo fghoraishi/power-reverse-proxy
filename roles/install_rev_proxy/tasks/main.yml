@@ -23,19 +23,24 @@
   template:
     src: nginx.repo.redhat.j2
     dest: /etc/yum.repos.d/nginx.repo
-  when: ansible_facts['distribution'] == "RedHat"
+  when: ansible_facts['distribution'] == "RedHat" or ansible_facts['distribution'] == "Rocky"
 
+- name: copy nginx repos for rocky linux
+  template:
+    src: nginx.repo.redhat.j2
+    dest: /etc/yum.repos.d/nginx.repo
+  when: ansible_facts['distribution'] == "Rocky"
 - name: Install nginx
   yum:
     name: nginx
     state: present
-  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat" or ansible_facts['distribution'] == "Rocky"
 
 - name: Install psmisc
   yum:
     name: psmisc
     state: present
-  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat" or ansible_facts['distribution'] == "Rocky"
 
 - name: copy custom nginx.conf to /etc/nginx/nginx.conf
   template:
@@ -52,7 +57,7 @@
   command: 'openssl genrsa -des3 -passout pass:{{ PASSWORD }} -out ~/acstest.key {{ RSA }}'
   when:
     - p.stat.exists == False
-    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat" or ansible_facts['distribution'] == "Rocky"
 #  tags: openssl
 
 - name: Ansible check file exists.
@@ -65,7 +70,7 @@
 
   when:
     - pp.stat.exists == False
-    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat" or ansible_facts['distribution'] == "Rocky"
 #  tags: openssl3
 
 - name: Ansible check file exists.
@@ -77,7 +82,7 @@
   command: 'openssl x509 -req -{{ ENCRYPT }} -days {{ SSL_EXPIRE }} -in ~/acstest.csr -signkey ~/acstest.key -out ~/acstest.crt'
   when:
     - ppp.stat.exists == False
-    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat" or ansible_facts['distribution'] == "Rocky"
 #  tags: openssl4
 
 - name: copy key files to /etc/pki/tls
@@ -95,7 +100,12 @@
 
 - name: Reload the config file
   command: "nginx -t"
-  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat" or ansible_facts['distribution'] == "Rocky"
+  tags: update
+
+- name: Make enginx process to start on reboot
+  command: "systemctl enable nginx"
+  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat" or ansible_facts['distribution'] == "Rocky"
   tags: update
 
 - name: Start nginx service
@@ -104,7 +114,7 @@
     state: restarted
   ignore_errors: True
   register: nginxout
-  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+  when: ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat" or ansible_facts['distribution'] == "Rocky"
 
 - name: "Run fuser to clear the IP addresses. This is to fix any nginx start issue"
   #command: "/usr/sbin/fuser -k 443/tcp; /usr/sbin/fuser -k 80/tcp"
@@ -113,7 +123,7 @@
   when:
     - p.stat.exists == True
     - nginxout is failed
-    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat" or ansible_facts['distribution'] == "Rocky"
 
 - name: "Run fuser to clear the IP addresses. This is to fix any nginx start issue"
   command: "/usr/sbin/fuser -k 80/tcp"
@@ -121,7 +131,7 @@
   when:
     - p.stat.exists == True
     - nginxout is failed
-    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat" or ansible_facts['distribution'] == "Rocky"
 
 - name: Start nginx service
   service:
@@ -130,7 +140,7 @@
   ignore_errors: True
   when:
     - nginxout is failed
-    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat"
+    - ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "RedHat" or ansible_facts['distribution'] == "Rocky"
 
 #- name: The acstest.crt files is located on the home directory. This file is to be used to configure IBM i servers
 #  shell: "cat ~/acstest.crt"
