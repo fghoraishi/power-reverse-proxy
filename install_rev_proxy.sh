@@ -25,12 +25,12 @@ if [ "$OS" = "rhel" ] || [ "$OS" = "centos" ] || [ "$OS" = "rocky" ]
 then
    VER=`cat /etc/os-release | grep VERSION_ID | awk -F\" {'print $2}' | awk -F. {'print $1}'`
    SUB=`cat /etc/os-release | grep VERSION_ID | awk -F\" {'print $2}'`
-   if [ $VER -lt 9 ]
+   if [ $VER -lt 8 ]
       then
          echo ##############################################
          echo "System runs on OS = $OS and Version = $SUB";
          echo ##############################################
-#         yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+         yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 #         subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extras-rpms"  --enable "rhel-ha-for-rhel-*-server-rpms"
          yum -y install epel-release
          yum -y upgrade
@@ -52,11 +52,11 @@ then
                  pip3 install --user ansible 
              fi
          yum -y upgrade
-   else
+   elif [ $VER -lt 8 ]
          echo ##############################################
          echo "System runs on OS = $OS and Version = $SUB";
          echo ##############################################
-#         yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+         yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 #         ARCH=$( /bin/arch );subscription-manager repos --enable "codeready-builder-for-rhel-8-${ARCH}-rpms"
 #         dnf config-manager --set-enabled powertools
          yum -y install epel-release
@@ -75,8 +75,35 @@ then
                  echo "Ansible is in yum repo. Instaling with yum"
                  yum -y install ansible
              else
-                 echo "nginx is not in yum repo. Installing via PIP3"
+                 echo "ansible is not in yum repo. Installing via PIP3"
                  pip3 install --user ansible 
+             fi
+         yum -y upgrade
+   else
+          echo ##############################################
+         echo "System runs on OS = $OS and Version = $SUB";
+         echo ##############################################
+         yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
+#         ARCH=$( /bin/arch );subscription-manager repos --enable "codeready-builder-for-rhel-8-${ARCH}-rpms"
+#         dnf config-manager --set-enabled powertools
+         yum -y install epel-release
+         yum -y upgrade
+         yum -y install python36
+         yum  list nginx | grep nginx &> /dev/null
+             if [ $? -eq 0 ]; then
+                 echo "nginx is in yum repo"
+                 yum -y install nginx
+             else
+                 echo "nginx is not in yum repo. Installing via ansible playbook via installing nginx repo first"
+             fi
+
+         yum  list ansible | grep ansible &> /dev/null
+             if [ $? -eq 0 ]; then
+                 echo "Ansible is in yum repo. Instaling with yum"
+                 yum -y install ansible
+             else
+                 echo "ansible is not in yum repo. Installing via PIP3"
+                 pip3 install --user ansible
              fi
          yum -y upgrade
    fi
