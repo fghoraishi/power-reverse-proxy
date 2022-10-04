@@ -26,7 +26,7 @@ then
    VER=`cat /etc/os-release | grep VERSION_ID | awk -F\" {'print $2}' | awk -F. {'print $1}'`
    SUB=`cat /etc/os-release | grep VERSION_ID | awk -F\" {'print $2}'`
    if [ $VER -lt 8 ]
-      then
+   then
          echo ##############################################
          echo "System runs on OS = $OS and Version = $SUB";
          echo ##############################################
@@ -52,7 +52,8 @@ then
                  pip3 install --user ansible 
              fi
          yum -y upgrade
-   elif [ $VER -lt 8 ]
+   elif [ $VER -lt 9 ]
+   then
          echo ##############################################
          echo "System runs on OS = $OS and Version = $SUB";
          echo ##############################################
@@ -79,8 +80,11 @@ then
                  pip3 install --user ansible 
              fi
          yum -y upgrade
-   else
-          echo ##############################################
+
+   elif [ $VER -lt 10 ]
+   then
+
+         echo ##############################################
          echo "System runs on OS = $OS and Version = $SUB";
          echo ##############################################
          yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
@@ -141,6 +145,6 @@ then
         cat ~/acstest.crt
 
 else
-    echo "This OS is not supported. We only supprt REHL/CentoOS versions 7 and 8"
+    echo "This OS is not supported. We only supprt REHL/CentoOS/Rocky versions 7 and 8"
 fi
 
