@@ -91,8 +91,10 @@ then
 #         ARCH=$( /bin/arch );subscription-manager repos --enable "codeready-builder-for-rhel-8-${ARCH}-rpms"
 #         dnf config-manager --set-enabled powertools
          yum -y install epel-release
+         dnf -y remove python-unversioned-command
          yum -y upgrade
-         yum -y install python36
+         yum -y install python39
+         dnf -y install python3-pip.noarch
          yum  list nginx | grep nginx &> /dev/null
              if [ $? -eq 0 ]; then
                  echo "nginx is in yum repo"
@@ -128,6 +130,7 @@ then
 
         ansible-playbook rev_prox_role.yml --extra-vars "COS_ENDPOINT_URL=$cos_endpoint PASSWORD=$password ENCRYPT=$encrypt RSA=$rsa FQDN=$FQDN ORGNAME=$ORGNAME SSL_EXPIRE=$ssl_expire"
 
+        yum -y upgrade
         #########################################################################################################
         echo
         echo
