@@ -45,15 +45,16 @@ STEPS:
 
 To make a server into a reverse-proxy server:
 
--  install git on your server and then issue the command "git clone https://github.com/fghoraishi/power-reverse-proxy.git"
+-  install git on your server (yum install git) and then issue the command "git clone https://github.com/fghoraishi/power-reverse-proxy.git"
 
--  Alsternativley, you can copy this tar file to the target server where you want to make into a reverse-proxy
+-  Alsternativley
+          - you can copy this tar file to the target server where you want to make into a reverse-proxy
 
--  untar the package " tar -xzvf <filename.tar.gz>"
-
+          -  untar the package " tar -xzvf <filename.tar.gz>"
+          
 -  Update the parameters in the "parameters.txt" file to meet you specific need.
 
-- Typically you only need to change the cos_endpoint parameter. It is recommended to change the password variable from the default given.
+- Typically you ONLY need to change the cos_endpoint parameter.
 
 -  Login to the target VSI as root and Run ./install_rev_proxy.sh to start installation on the target VSI.
 
